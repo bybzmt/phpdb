@@ -98,7 +98,7 @@ class DB extends \PDO
 	 *
 	 * 成功返回数据 失败返回 false
 	 */
-	public function fetchColumn($sql, array $params=array(), $column=0)
+	public function fetchColumn($sql, array $params=null, $column=0)
 	{
 		if ($params) {
 			$stmt = $this->prepare($sql);
@@ -119,7 +119,7 @@ class DB extends \PDO
 	 *
 	 * 成功返回 array 失败返回 false
 	 */
-	public function fetchColumnAll($sql, array $params=array(), $column=0)
+	public function fetchColumnAll($sql, array $params=null, $column=0)
 	{
 		if ($params) {
 			$stmt = $this->prepare($sql);
@@ -132,7 +132,6 @@ class DB extends \PDO
 			if (!$stmt) { return false; }
 		}
 
-		//return $stmt->fetchAll(PDO::FETCH_COLUMN|PDO::FETCH_BOTH, $column);
 		return $stmt->fetchAll(PDO::FETCH_COLUMN, $column);
 	}
 
@@ -255,7 +254,7 @@ class DB extends \PDO
 		$sql = "DELETE FROM {$table} WHERE " . $this->_where($where);
 
 		if ($limit) {
-			$sql .= "LIMIT {$limit}";
+			$sql .= " LIMIT {$limit}";
 		}
 
 		return $this->exec($sql);
