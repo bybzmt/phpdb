@@ -1,0 +1,23 @@
+{
+    "name": "bybzmt/phpdb",
+    "description": "php db tools for pdo",
+    "keywords": ["db tools", "pdo"],
+    "homepage": "http://github.com/bybzmt/phpdb",
+    "type": "library",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "bybzmt",
+            "email": "other@bybzmt.me",
+            "homepage": "http://github.com/bybzmt"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "bybzmt\\DB\\": "src/"
+        }
+    }
+}
