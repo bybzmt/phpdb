@@ -4,13 +4,13 @@ namespace bybzmt\DB;
 /**
  * PDOStatement套子 用来监控执行
  */
-class MonitorStmt extends \PDOStatement
+class loggerStmt extends \PDOStatement
 {
-	private $monitor;
+	private $logger;
 
-	protected function __construct($monitor)
+	protected function __construct($logger)
 	{
-		$this->monitor = $monitor;
+		$this->logger = $logger;
 	}
 
 	//记录执行时间
@@ -20,7 +20,7 @@ class MonitorStmt extends \PDOStatement
 		$out = parent::execute($params);
 		$t2 = microtime(true);
 
-		$this->monitor->logSQLRun($t2-$t1, $this->queryString, $params);
+		$this->logger($t2-$t1, $this->queryString, $params);
 
 		return $out;
 	}

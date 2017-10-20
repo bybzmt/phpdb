@@ -7,50 +7,13 @@
 
 namespace bybzmt\DB;
 
-use \PDO;
+use PDO;
 
 /**
  * 数据库连接类
  */
-class DB extends \PDO
+class DB extends PDO
 {
-	protected $placehold;
-	protected $prefix;
-
-	// 替换前缀
-	public function prepare($sql, $opts=array())
-	{
-		return parent::prepare($this->replace_prefix($sql), $opts);
-	}
-
-	// 替换前缀
-	public function exec($sql)
-	{
-		return parent::exec($this->replace_prefix($sql));
-	}
-
-	// 替换前缀
-	public function query($sql)
-	{
-		$params = func_get_args();
-		$params[0] = $this->replace_prefix($sql);
-
-		return call_user_func_array(array('parent', 'query'), $params);
-	}
-
-	//设置前缀
-	public function setPrefix($placehold, $prefix)
-	{
-		$this->placehold = $placehold;
-		$this->prefix = $prefix;
-	}
-
-	// 替换前缀
-	protected function replace_prefix($sql)
-	{
-		return $this->placehold ? str_replace($this->placehold, $this->prefix, $sql) : $sql;
-	}
-
 	/**
 	 * 执行sql并取出1行记录
 	 *
@@ -58,6 +21,8 @@ class DB extends \PDO
 	 */
 	public function fetch($sql, array $params=array())
 	{
+        $sql .= " LIMIT 1";
+
 		if ($params) {
 			$stmt = $this->prepare($sql);
 			if (!$stmt) { return false; }
@@ -77,8 +42,12 @@ class DB extends \PDO
 	 *
 	 * 成功返回 array 失败返回 false
 	 */
-	public function fetchAll($sql, array $params=array())
+	public function fetchAll($sql, array $params=array(), $offset=0, $length=0)
 	{
+        if ($length > 0) {
+            $sql .= " LIMIT " . (int)$offset . ', '. (int)$length;
+        }
+
 		if ($params) {
 			$stmt = $this->prepare($sql);
 			if (!$stmt) { return false; }
@@ -100,6 +69,8 @@ class DB extends \PDO
 	 */
 	public function fetchColumn($sql, array $params=null, $column=0)
 	{
+        $sql .= " LIMIT 1";
+
 		if ($params) {
 			$stmt = $this->prepare($sql);
 			if (!$stmt) { return false; }
@@ -119,8 +90,12 @@ class DB extends \PDO
 	 *
 	 * 成功返回 array 失败返回 false
 	 */
-	public function fetchColumnAll($sql, array $params=null, $column=0)
+	public function fetchColumnAll($sql, array $params=null, $column=0, $offset=0, $length=0)
 	{
+        if ($length > 0) {
+            $sql .= " LIMIT " . (int)$offset . ', '. (int)$length;
+        }
+
 		if ($params) {
 			$stmt = $this->prepare($sql);
 			if (!$stmt) { return false; }
@@ -222,7 +197,7 @@ class DB extends \PDO
 	 *
 	 * @return 失败返回false, 成功返影响记录条数
 	 */
-	public function update($table, $feilds, $where)
+	public function update($table, $feilds, $where, $limit=0)
 	{
 		$set = array();
 
@@ -233,6 +208,10 @@ class DB extends \PDO
 		$set = implode(', ', $set);
 
 		$sql = "UPDATE {$table} SET {$set} WHERE " . $this->_where($where);
+
+        if ($limit > 0) {
+            $sql .= " LIMIT ".(int)$limit;
+        }
 
 		return $this->exec($sql);
 	}
@@ -254,7 +233,7 @@ class DB extends \PDO
 		$sql = "DELETE FROM {$table} WHERE " . $this->_where($where);
 
 		if ($limit) {
-			$sql .= " LIMIT {$limit}";
+			$sql .= " LIMIT ".(int)$limit;
 		}
 
 		return $this->exec($sql);
