@@ -5,7 +5,7 @@
  *
  */
 
-namespace bybzmt\DB;
+namespace Bybzmt\DB;
 
 /**
  * 数据库连接类

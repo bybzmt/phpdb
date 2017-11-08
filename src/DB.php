@@ -5,7 +5,7 @@
  *
  */
 
-namespace bybzmt\DB;
+namespace Bybzmt\DB;
 
 use PDO;
 
