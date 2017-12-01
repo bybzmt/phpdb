@@ -36,7 +36,7 @@ class PDOConn extends PDO
         return $this->fetchAll($sql, $tmp, $offset, $length);
     }
 
-	public function fetchColumn($table, $column, array $where)
+	public function findColumn($table, $column, array $where)
     {
         $tmp = array();
 
