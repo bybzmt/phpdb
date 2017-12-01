@@ -4,7 +4,7 @@ namespace Bybzmt\DB;
 /**
  * PDOStatement套子 用来监控执行
  */
-class loggerStmt extends \PDOStatement
+class MonitorStmt extends \PDOStatement
 {
 	private $logger;
 
@@ -20,7 +20,7 @@ class loggerStmt extends \PDOStatement
 		$out = parent::execute($params);
 		$t2 = microtime(true);
 
-		$this->logger($t2-$t1, $this->queryString, $params);
+		call_user_func($this->logger, $t2-$t1, $this->queryString, $params);
 
 		return $out;
 	}
