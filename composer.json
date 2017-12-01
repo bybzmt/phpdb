@@ -18,6 +18,7 @@
     "autoload": {
         "psr-4": {
             "bybzmt\\DB\\": "src/"
+            "Bybzmt\\DB\\": "src/"
         }
     }
 }

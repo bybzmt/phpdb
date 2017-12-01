@@ -1,5 +1,5 @@
 <?php
-namespace bybzmt\DB;
+namespace Bybzmt\DB;
 
 /**
  * PDOStatement套子 用来监控执行
