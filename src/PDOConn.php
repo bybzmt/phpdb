@@ -14,7 +14,7 @@ use PDO;
  */
 class PDOConn extends PDO
 {
-    public function find($table, array $columns, array $where0)
+    public function find($table, array $columns, array $where)
     {
         $_columns = implode("`,`", $columns);
 
@@ -280,18 +280,16 @@ class PDOConn extends PDO
 
 	private function _where($where, &$tmp)
 	{
-		if (!is_array($where)) {
-			return $where;
-		}
-
 		$_where = array();
 
 		foreach ($where as $key => $val) {
 			if (is_array($val)) {
-				$_where[] = "`{$key}` IN (" . implode(', ', array_map(array($this, 'quote'), $val)) . ')';
+				$_where[] = "`{$key}` IN (" . implode(",", array_fill(0, count($val), '?')) . ')';
+                $tmp = array_merge($tmp, $val);
 			}
 			else {
-				$_where[] = "`{$key}` = " . $this->quote($val);
+				$_where[] = "`{$key}` = ?";
+                $tmp[] = $val;
 			}
 		}
 
