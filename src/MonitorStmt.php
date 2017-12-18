@@ -20,7 +20,7 @@ class MonitorStmt extends \PDOStatement
 		$out = parent::execute($params);
 		$t2 = microtime(true);
 
-		call_user_func($this->logger, $t2-$t1, $this->queryString, $params);
+		call_user_func($this->logger, $t2-$t1, $this->queryString, $params?$params:array());
 
 		return $out;
 	}
