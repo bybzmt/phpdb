@@ -20,7 +20,7 @@ class PDOConn extends PDO
 
         $tmp = array();
 
-        $sql = "SELECT `$_columns` FROM `{$table}` WHERE " . $this->_where($where, $tmp);
+        $sql = "SELECT `$_columns` FROM `{$table}` WHERE " . $this->buildWhere($where, $tmp);
 
         return $this->fetch($sql, $tmp);
     }
@@ -31,7 +31,7 @@ class PDOConn extends PDO
 
         $tmp = array();
 
-        $sql = "SELECT `$_columns` FROM `{$table}` WHERE " . $this->_where($where, $tmp);
+        $sql = "SELECT `$_columns` FROM `{$table}` WHERE " . $this->buildWhere($where, $tmp);
 
         return $this->fetchAll($sql, $tmp, $offset, $length);
     }
@@ -40,7 +40,7 @@ class PDOConn extends PDO
     {
         $tmp = array();
 
-        $sql = "SELECT `$column` FROM `{$table}` WHERE " . $this->_where($where, $tmp);
+        $sql = "SELECT `$column` FROM `{$table}` WHERE " . $this->buildWhere($where, $tmp);
 
         return $this->fetchColumn($sql, $tmp);
     }
@@ -49,7 +49,7 @@ class PDOConn extends PDO
     {
         $tmp = array();
 
-        $sql = "SELECT `$column` FROM `{$table}` WHERE " . $this->_where($where, $tmp);
+        $sql = "SELECT `$column` FROM `{$table}` WHERE " . $this->buildWhere($where, $tmp);
 
         return $this->fetchColumnAll($sql, $tmp, 0, $offset, $length);
     }
@@ -245,7 +245,7 @@ class PDOConn extends PDO
 
 		$set = implode(', ', $set);
 
-		$sql = "UPDATE {$table} SET {$set} WHERE " . $this->_where($where, $vals);
+		$sql = "UPDATE {$table} SET {$set} WHERE " . $this->buildWhere($where, $vals);
 
         if ($limit > 0) {
             $sql .= " LIMIT ".(int)$limit;
@@ -268,7 +268,7 @@ class PDOConn extends PDO
 	{
         $tmp = array();
 
-		$sql = "DELETE FROM {$table} WHERE " . $this->_where($where, $tmp);
+		$sql = "DELETE FROM {$table} WHERE " . $this->buildWhere($where, $tmp);
 
 		if ($limit) {
 			$sql .= " LIMIT ".(int)$limit;
@@ -278,7 +278,7 @@ class PDOConn extends PDO
         return $stmt ? $stmt->execute($tmp) : false;
 	}
 
-	private function _where($where, &$tmp)
+	public function buildWhere($where, &$tmp)
 	{
 		$_where = array();
 
@@ -293,7 +293,7 @@ class PDOConn extends PDO
 			}
 		}
 
-		return implode(' AND ', $_where);
+		return implode(' AND ', $where);
 	}
 
 
