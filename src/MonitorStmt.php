@@ -14,7 +14,7 @@ class MonitorStmt extends \PDOStatement
 	}
 
 	//记录执行时间
-	public function execute($params=null)
+	public function execute($params=null):bool
 	{
 		$t1 = microtime(true);
 		$out = parent::execute($params);
